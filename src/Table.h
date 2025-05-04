@@ -6,7 +6,7 @@ private:
 
 	int total_minutes_occupied = 0;
 	bool occupied = false;
-	Time time_occupancy_start = Time(0, 0);
+	Time time_occupancy_start;
 
 public:
 	

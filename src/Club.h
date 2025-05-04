@@ -18,7 +18,7 @@ private:
 
 	std::queue<Client> clients_queue;
 	std::vector<Table> tables;
-	std::unordered_map<std::string, Client> clients_name;
+	std::unordered_map<std::string, Client> clients_names;
 	
 public:
 
@@ -26,7 +26,7 @@ public:
 		: tables_amount(tables_amount), start_time(start_time), end_time(end_time), rate(rate) {
 		
 		tables = std::vector<Table>(tables_amount);
-		
-
 	}
+
+
 };

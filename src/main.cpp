@@ -1,23 +1,28 @@
-#include "Time.h"
+#include "Event.h"
 #include <iostream>
 #include <fstream>
 #include <ranges>
 #include <regex>
 #include <optional>
 
+class Time;
+
 std::vector<std::string> splitString(const std::string& input, const std::string& delim);
 std::optional<Time> parseTime(const std::string& time_string);
 
 
 int main(int argc, char* argv[]) {
-    
+
     if (argc < 2) {
         return 0;
     }
 
     int tables_num;
+
     Time start_time;
+
     Time end_time;
+
     int rate;
 
     std::ifstream file(argv[1]);
@@ -75,6 +80,8 @@ int main(int argc, char* argv[]) {
         }
 
         while (getline(file, line)) {
+
+
 
         }
 

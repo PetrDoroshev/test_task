@@ -29,3 +29,9 @@ bool Time::operator>(const Time& other) const
 {
     return ((this->hours * 60 + this->minutes) > (other.hours * 60 + other.minutes));;
 }
+
+std::string Time::toString() const {
+
+    return std::format("{:02}:{:02}", hours, minutes); 
+
+}

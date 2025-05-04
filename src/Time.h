@@ -1,10 +1,12 @@
 #include <stdexcept>
+#include <format>
 
 class Time {
 
 private:
-    int hours;
-    int minutes;
+
+    int hours = 0;
+    int minutes = 0;
 
 public:
 
@@ -22,6 +24,7 @@ public:
     Time operator- (const Time& other);
     bool operator< (const Time& other) const;
     bool operator> (const Time& other) const;
+    std::string toString() const;
 };
 
 
