@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <format>
+#include "Utils.h"
 
 class Time {
 
@@ -11,13 +12,8 @@ private:
 public:
 
     Time() {};
-    Time(int hours_, int minutes_): hours(hours_), minutes(minutes_) {
-        
-        if (hours_ < 0 || minutes_ < 0 || hours_ > 23 || minutes_ > 59) {
-            
-            throw std::invalid_argument("invalid value");
-        }
-    }
+    Time(int hours_, int minutes_);
+    Time(const std::string& time_string);
 
     int getHours() const;
     int getMinutes() const;

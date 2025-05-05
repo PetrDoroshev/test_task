@@ -1,9 +1,8 @@
-#include <Time.h>
+#include "Table.h"
+#include "Client.h"
 #include <vector>
 #include <queue>
 #include <unordered_map>
-#include <Table.h>
-#include <Client.h>
 
 class Club {
 
@@ -17,6 +16,7 @@ private:
 	int rate;
 
 	std::queue<Client> clients_queue;
+	std::queue<std::string> events_queue;
 	std::vector<Table> tables;
 	std::unordered_map<std::string, Client> clients_names;
 	
@@ -26,6 +26,13 @@ public:
 		: tables_amount(tables_amount), start_time(start_time), end_time(end_time), rate(rate) {
 		
 		tables = std::vector<Table>(tables_amount);
+	}
+
+	void processEvent(const std::string& event_string) {
+
+		
+
+
 	}
 
 

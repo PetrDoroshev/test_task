@@ -1,5 +1,29 @@
 #include "Time.h"
 
+Time::Time(int hours_, int minutes_): hours(hours_), minutes(minutes_) {
+        
+    if (hours_ < 0 || minutes_ < 0 || hours_ > 23 || minutes_ > 59) {
+        
+        throw std::invalid_argument("invalid value");
+    }
+};
+
+Time::Time(const std::string& time_string) {
+
+    auto tokens = splitString(time_string, ":");
+    int hours_ = std::stoi(tokens[0]);
+    int minutes_ = std::stoi(tokens[1]);
+   
+    if (hours_ < 0 || minutes_ < 0 || hours_ > 23 || minutes_ > 59) {
+        
+        throw std::invalid_argument("invalid value");
+    }
+
+    hours = hours_;
+    minutes = minutes_;
+    
+}
+
 int Time::getHours() const {
     return hours;
 }
