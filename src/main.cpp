@@ -1,13 +1,14 @@
 #include "Event.h"
 #include "Club.h"
 #include "Utils.h"
+#include "Time.h"
 #include <iostream>
 #include <fstream>
 #include <ranges>
 #include <regex>
 #include <optional>
 
-class Time;
+
 
 int main(int argc, char* argv[]) {
 
@@ -80,8 +81,9 @@ int main(int argc, char* argv[]) {
         while (getline(file, line)) {
 
             if (std::regex_match(line, std::regex("\\d{2}:\\d{2}\\s\\d{1,2}\\s[a-z, 1-9,_,-]+\\s{0,1}\\d*"))) {
-
-            }
+                
+                club.processEvent(std::unique_ptr<Event>(new ClientEvent(line)));
+            }  
 
             else {
 

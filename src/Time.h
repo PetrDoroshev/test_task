@@ -1,3 +1,6 @@
+#ifndef TIME_H
+#define TIME_H
+
 #include <stdexcept>
 #include <format>
 #include "Utils.h"
@@ -23,7 +26,7 @@ public:
     std::string toString() const;
 };
 
-
+#endif
 
 
 

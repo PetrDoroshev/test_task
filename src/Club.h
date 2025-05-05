@@ -1,8 +1,14 @@
+#ifndef CLUB_H
+#define CLUB_H
+
 #include "Table.h"
 #include "Client.h"
+#include "Utils.h"
+#include "ClientEvent.h"
 #include <vector>
 #include <queue>
 #include <unordered_map>
+#include <memory>
 
 class Club {
 
@@ -16,9 +22,15 @@ private:
 	int rate;
 
 	std::queue<Client> clients_queue;
-	std::queue<std::string> events_queue;
+	std::queue<std::unique_ptr<Event>> events_queue;
 	std::vector<Table> tables;
 	std::unordered_map<std::string, Client> clients_names;
+
+	void clientArrive (const ClientEvent& event);
+	void clientTakeTable (const ClientEvent& event);
+	void clientsAwaits (const ClientEvent& event);
+	void clientLeft (const ClientEvent& event);
+	
 	
 public:
 
@@ -28,12 +40,8 @@ public:
 		tables = std::vector<Table>(tables_amount);
 	}
 
-	void processEvent(const std::string& event_string) {
-
-		
-
-
-	}
-
-
+	void processEvent(std::unique_ptr<Event> event);
 };
+
+
+#endif

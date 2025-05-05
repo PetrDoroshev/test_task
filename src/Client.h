@@ -1,3 +1,6 @@
+#ifndef CLIENT_H
+#define CLIENT_H
+
 #include <string>
 #include <optional>
 
@@ -17,3 +20,5 @@ public:
 	void setInClub(bool in_club) { this->in_club = in_club;  }
 
 };
+
+#endif

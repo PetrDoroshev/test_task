@@ -1,3 +1,6 @@
+#ifndef TABLE_H
+#define TABLE_H
+
 #include "Time.h"
 
 class Table {
@@ -16,3 +19,6 @@ public:
 	void Occupy(Time time);
 	void Release(Time time);
 };
+
+
+#endif
