@@ -17,7 +17,7 @@ public:
 	
 	Time getTimeOccupied() const;
 	int getIncome(int rate) const;
-	bool isOccpied() const;
+	bool isOccupied() const;
 	void Occupy(Time time);
 	void Release(Time time);
 };

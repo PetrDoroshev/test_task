@@ -102,7 +102,7 @@ void Club::clientTakeTable (const ClientEvent& event) {
 
     auto client_table_num = client.getTableNum();
 
-    if (tables[event.getTableNum().value() - 1].isOccpied()) {
+    if (tables[event.getTableNum().value() - 1].isOccupied()) {
 
         events_list.push_back(std::unique_ptr<Event>(new ErrorEvent(event.getTime(), "PlaceIsBusy")));
         return;
@@ -121,7 +121,7 @@ void Club::clientsAwaits (const ClientEvent& event) {
 
     for (auto& table: tables) {
         
-        if (!table.isOccpied()) {
+        if (!table.isOccupied()) {
 
             events_list.push_back(std::unique_ptr<Event>(new ErrorEvent(event.getTime(), "ICanWaitNoLonger!")));
             return;

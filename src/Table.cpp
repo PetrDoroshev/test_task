@@ -6,7 +6,7 @@ Time Table::getTimeOccupied() const {
 	return Time(total_minutes_occupied / 60, total_minutes_occupied % 60);
 }
 
-bool Table::isOccpied() const {
+bool Table::isOccupied() const {
 	
 	return is_occupied;
 }
