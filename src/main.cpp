@@ -12,7 +12,8 @@ int main(int argc, char *argv[]) {
 
     if (argc < 2) {
 
-        return 0;
+        std::cout << "file not specified !" << std::endl;
+        return EXIT_FAILURE;
     }
 
     int tables_amount;
@@ -85,7 +86,16 @@ int main(int argc, char *argv[]) {
 
         if (std::regex_match(line, std::regex("\\d{2}:\\d{2}\\s\\d{1,2}\\s[a-z, 1-9,_,-]+\\s{0,1}\\d*"))) {
 
-            club.processEvent(new ClientEvent(line));
+            try {
+
+                club.processEvent(new ClientEvent(line));
+            }
+            catch(std::invalid_argument &ex) {
+
+                std::cout << line << std::endl;
+                std::cout << ex.what() << std::endl;
+                return EXIT_FAILURE;
+            }
         }
 
         else {
@@ -93,6 +103,15 @@ int main(int argc, char *argv[]) {
             std::cout << line << std::endl;
             return EXIT_FAILURE;
         }
+    }
+
+    club.closeClub();
+    club.printEvents();
+
+    for (auto& table: club.getTables()) {
+
+        std::cout << table.getIncome(club.getRate()) << ", " << table.getTimeOccupied().toString() << std::endl;
+
     }
 
     file.close();

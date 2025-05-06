@@ -4,7 +4,7 @@ Time::Time(int hours_, int minutes_): hours(hours_), minutes(minutes_) {
         
     if (hours_ < 0 || minutes_ < 0 || hours_ > 23 || minutes_ > 59) {
         
-        throw std::invalid_argument("invalid value");
+        throw std::invalid_argument("invalid hour or minute value");
     }
 };
 
@@ -16,7 +16,7 @@ Time::Time(const std::string& time_string) {
    
     if (hours_ < 0 || minutes_ < 0 || hours_ > 23 || minutes_ > 59) {
         
-        throw std::invalid_argument("invalid value");
+        throw std::invalid_argument("invalid hour or minute value");
     }
 
     hours = hours_;
@@ -53,6 +53,22 @@ bool Time::operator>(const Time& other) const
 {
     return ((this->hours * 60 + this->minutes) > (other.hours * 60 + other.minutes));;
 }
+
+bool Time::operator== (const Time& other) const {
+
+    return !(*this > other) && !(*this < other);
+}
+
+bool Time::operator<= (const Time& other) const {
+
+    return !(*this > other);
+}
+
+bool Time::operator>= (const Time& other) const {
+    
+    return !(*this < other);
+}
+
 
 std::string Time::toString() const {
 

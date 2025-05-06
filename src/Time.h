@@ -23,6 +23,9 @@ public:
     Time operator- (const Time& other);
     bool operator< (const Time& other) const;
     bool operator> (const Time& other) const;
+    bool operator== (const Time& other) const;
+    bool operator<= (const Time& other) const;
+    bool operator>= (const Time& other) const;
     std::string toString() const;
 };
 

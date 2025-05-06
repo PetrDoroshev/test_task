@@ -8,8 +8,11 @@
 #include "events/ErrorEvent.h"
 #include <vector>
 #include <queue>
+#include <list>
 #include <unordered_map>
 #include <memory>
+#include <algorithm>
+#include <iostream>
 
 class Club {
 
@@ -23,7 +26,7 @@ private:
 	int rate;
 
 	std::queue<std::string> clients_queue;
-	std::queue<std::unique_ptr<Event>> events_queue;
+	std::list<std::unique_ptr<Event>> events_list;
 	std::vector<Table> tables;
 	std::unordered_map<std::string, Client> clients_names;
 
@@ -42,7 +45,18 @@ public:
 	}
 
 	void processEvent(ClientEvent* event); 
+	void closeClub();
+
 	std::vector<Table> getTables();
+	int getRate();
+
+	void printEvents() {
+
+		for (auto& event: events_list) {
+			std::cout << event->toString() << std::endl;
+		}
+	}
+
 };
 
 

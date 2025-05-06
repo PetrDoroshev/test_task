@@ -1,12 +1,28 @@
 #include "Club.h"
 
+
 std::vector<Table> Club::getTables() {
     return tables;
 }
 
+int Club::getRate() {
+    return rate;
+}
+
 void Club::processEvent(ClientEvent* event) {
 
-    events_queue.push(std::unique_ptr<Event>(event));
+    if (!events_list.empty() && event->getTime() <= events_list.back()->getTime()) {
+
+        throw std::invalid_argument("event time is less or equal than the time of the previous event");
+
+    }
+
+    if (event->getTableNum().has_value() && event->getTableNum() > tables_amount) {
+
+        throw std::invalid_argument("table number is larger than tables amount");
+    }
+
+    events_list.push_back(std::unique_ptr<Event>(event));
 
     switch (event->getType()) {
 
@@ -31,13 +47,13 @@ void Club::clientArrive (const ClientEvent& event) {
 
     if (clients_names[event.getClientName()].inClub()) {
 
-        events_queue.push(std::unique_ptr<Event>(new ErrorEvent(event.getTime(), "YouShallNotPass")));
+        events_list.push_back(std::unique_ptr<Event>(new ErrorEvent(event.getTime(), "YouShallNotPass")));
         return;
     }
 
     if (event.getTime() < start_time) {
 
-        events_queue.push(std::unique_ptr<Event>(new ErrorEvent(event.getTime(), "NotOpenYet")));
+        events_list.push_back(std::unique_ptr<Event>(new ErrorEvent(event.getTime(), "NotOpenYet")));
         return;
     }
 
@@ -47,11 +63,11 @@ void Club::clientArrive (const ClientEvent& event) {
 
 void Club::clientTakeTable (const ClientEvent& event) {
 
-    auto client = clients_names[event.getClientName()];
+    auto& client = clients_names[event.getClientName()];
 
     if (!client.inClub()) {
         
-        events_queue.push(std::unique_ptr<Event>(new ErrorEvent(event.getTime(), "ClientUnknown")));
+        events_list.push_back(std::unique_ptr<Event>(new ErrorEvent(event.getTime(), "ClientUnknown")));
         return;
     }
 
@@ -59,11 +75,11 @@ void Club::clientTakeTable (const ClientEvent& event) {
 
     if (tables[event.getTableNum().value() - 1].isOccpied()) {
 
-        events_queue.push(std::unique_ptr<Event>(new ErrorEvent(event.getTime(), "PlaceIsBusy")));
+        events_list.push_back(std::unique_ptr<Event>(new ErrorEvent(event.getTime(), "PlaceIsBusy")));
         return;
     }
 
-    client.setTableNum(event.getTableNum().value() - 1);
+    client.setTableNum(event.getTableNum().value());
     tables[event.getTableNum().value() - 1].Occupy(event.getTime());
     
     if (client_table_num.has_value()) {
@@ -78,7 +94,7 @@ void Club::clientsAwaits (const ClientEvent& event) {
         
         if (!table.isOccpied()) {
 
-            events_queue.push(std::unique_ptr<Event>(new ErrorEvent(event.getTime(), "ICanWaitNoLonger!")));
+            events_list.push_back(std::unique_ptr<Event>(new ErrorEvent(event.getTime(), "ICanWaitNoLonger!")));
             return;
         }
     }
@@ -86,33 +102,65 @@ void Club::clientsAwaits (const ClientEvent& event) {
     if (clients_queue.size() > tables_amount) {
 
         clients_names[event.getClientName()].setInClub(false);
-        events_queue.push(std::unique_ptr<Event>(new ClientEvent(event.getTime(), eventType::CLIENT_LEFT_OUT, event.getClientName())));
+        events_list.push_back(std::unique_ptr<Event>(new ClientEvent(event.getTime(), eventType::CLIENT_LEFT_OUT, event.getClientName())));
         return;
     }
 
     clients_queue.push(event.getClientName());
 }
 
-void Club::clientLeft (const ClientEvent& event) {
+void Club::clientLeft(const ClientEvent& event) {
+    
 
-    auto client = clients_names[event.getClientName()];
+    auto& client = clients_names[event.getClientName()];
     
     if (!client.inClub()) {
 
-        events_queue.push(std::unique_ptr<Event>(new ErrorEvent(event.getTime(), "ClientUnknown")));
+        events_list.push_back(std::unique_ptr<Event>(new ErrorEvent(event.getTime(), "ClientUnknown")));
         return;
     }
 
     tables[client.getTableNum().value() - 1].Release(event.getTime());
     client.setInClub(false);
-    
+
     if (!clients_queue.empty()) {
 
-        auto new_client = clients_names[clients_queue.front()];
+        auto& new_client = clients_names[clients_queue.front()];
         tables[client.getTableNum().value() - 1].Occupy(event.getTime());
-        client.setTableNum(client.getTableNum().value() - 1);
+        new_client.setTableNum(client.getTableNum().value());
 
-        events_queue.push(std::unique_ptr<Event>(new ClientEvent(event.getTime(), eventType::CLIENT_TAKE_TABLE_OUT, event.getClientName())));
+        events_list.push_back(std::unique_ptr<Event>(new ClientEvent(event.getTime(), eventType::CLIENT_TAKE_TABLE_OUT, clients_queue.front(),
+        client.getTableNum().value())));
+
+        clients_queue.pop();
+    }
+    
+
+}
+
+void Club::closeClub() {
+
+    for (auto& table: tables) {
+
+        table.Release(end_time);
+    }
+    
+    std::vector<std::string> names;
+    for (auto& pair: clients_names) {
+
+        names.push_back(pair.first);
+    }
+
+    std::sort(names.begin(), names.end());
+        
+    for (auto& name: names) {
+
+        if (clients_names[name].inClub()) {
+
+            events_list.push_back(std::unique_ptr<Event>(new ClientEvent(end_time,
+                                                                        eventType::CLIENT_LEFT_OUT, 
+                                                                        name)));
+        }
     }
 
 }

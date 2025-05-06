@@ -3,10 +3,22 @@
 ClientEvent::ClientEvent(const std::string& event_string) {
 
     auto tokens = splitString(event_string, " ");
- 
-    time = Time(tokens[0]);
+    
 
-    type = static_cast<eventType>(std::stoi(tokens[1]));
+    try {
+        time = Time(tokens[0]);
+    }
+    catch (std::invalid_argument& ex) {
+        throw;
+    }
+
+    int event_id = std::stoi(tokens[1]);
+
+    if (!(event_id >= 1 && event_id <= 4) && !(event_id >= 11 && event_id <= 13)) {
+        throw std::invalid_argument("invalid event id");
+    }
+
+    type = static_cast<eventType>(event_id);
     
     client_name = tokens[2];
 
