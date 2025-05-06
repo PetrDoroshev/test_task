@@ -61,6 +61,12 @@ int main(int argc, char *argv[]) {
             std::cout << line << std::endl;
             return EXIT_FAILURE;
         }
+
+        if (start_time >= end_time) {
+
+            std::cout << line << std::endl;
+            return EXIT_FAILURE;
+        }
     }
     else {
 
@@ -79,8 +85,12 @@ int main(int argc, char *argv[]) {
         std::cout << line << std::endl;
         return EXIT_FAILURE;
     }
+    
 
     auto club = Club(tables_amount, start_time, end_time, rate);
+    
+
+    std::cout << start_time.toString() << std::endl;
 
     while (getline(file, line)) {
 

@@ -1,5 +1,16 @@
 #include "Club.h"
 
+Club::Club(unsigned int tables_amount, const Time& start_time, const Time& end_time, unsigned int rate)
+		: tables_amount(tables_amount), start_time(start_time), end_time(end_time), rate(rate) {
+		
+        if (start_time >= end_time) {
+            throw std::invalid_argument("start time is larger than end time");
+        }
+        
+			
+		tables = std::vector<Table>(tables_amount);
+	}
+
 
 std::vector<Table> Club::getTables() {
     return tables;
@@ -8,6 +19,14 @@ std::vector<Table> Club::getTables() {
 int Club::getRate() {
     return rate;
 }
+
+void Club::printEvents() {
+
+    for (auto& event: events_list) {
+        std::cout << event->toString() << std::endl;
+    }
+}
+
 
 void Club::processEvent(ClientEvent* event) {
 

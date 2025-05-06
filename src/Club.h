@@ -38,25 +38,15 @@ private:
 	
 public:
 
-	Club(unsigned int tables_amount, const Time& start_time, const Time& end_time, unsigned int rate)
-		: tables_amount(tables_amount), start_time(start_time), end_time(end_time), rate(rate) {
-		
-		tables = std::vector<Table>(tables_amount);
-	}
+	Club(unsigned int tables_amount, const Time& start_time, const Time& end_time, unsigned int rate);
 
 	void processEvent(ClientEvent* event); 
 	void closeClub();
 
 	std::vector<Table> getTables();
 	int getRate();
-
-	void printEvents() {
-
-		for (auto& event: events_list) {
-			std::cout << event->toString() << std::endl;
-		}
-	}
-
+	
+	void printEvents();
 };
 
 
