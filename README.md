@@ -1,13 +1,20 @@
 Тестовое задания для стажировки по направлению C++
 
-## Требования
+## Инструкция по сборке
 
+### Требования
 - g++ (13.1+)
 - CMake (3.26+)
 
-## Инструкция по сборке
+### 1. Клонирование репозитория
+
+```bash
+git clone https://github.com/PetrDoroshev/test_task.git
+cd test_task
+```
+### 2. Сборка с помощью CMake
 ```bash
 mkdir build
 cd build
-cmake ..
-ninja
+cmake -G "Unix Makefiles" ..
+make
