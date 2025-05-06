@@ -3,9 +3,15 @@
 Club::Club(unsigned int tables_amount, const Time& start_time, const Time& end_time, unsigned int rate)
 		: tables_amount(tables_amount), start_time(start_time), end_time(end_time), rate(rate) {
 		
+        if (tables_amount < 1) {
+            throw std::invalid_argument("amount of tables must be larger than zero");
+        }
+
         if (start_time >= end_time) {
             throw std::invalid_argument("start time is larger than end time");
         }
+
+
         
 			
 		tables = std::vector<Table>(tables_amount);
@@ -39,6 +45,10 @@ void Club::processEvent(ClientEvent* event) {
     if (event->getTableNum().has_value() && event->getTableNum() > tables_amount) {
 
         throw std::invalid_argument("table number is larger than tables amount");
+    }
+
+    if (event->getTime() > end_time) {
+        return;
     }
 
     events_list.push_back(std::unique_ptr<Event>(event));
