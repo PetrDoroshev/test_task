@@ -108,10 +108,13 @@ int main(int argc, char *argv[]) {
     club.closeClub();
     club.printEvents();
 
+    std::cout << end_time.toString() << std::endl;
+
+    int table_num = 1;
     for (auto& table: club.getTables()) {
 
-        std::cout << table.getIncome(club.getRate()) << ", " << table.getTimeOccupied().toString() << std::endl;
-
+        std::cout << table_num << " " << table.getIncome(club.getRate()) << " " << table.getTimeOccupied().toString() << std::endl;
+        table_num++;
     }
 
     file.close();

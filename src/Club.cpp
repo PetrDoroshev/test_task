@@ -99,6 +99,12 @@ void Club::clientsAwaits (const ClientEvent& event) {
         }
     }
 
+    if (!clients_names[event.getClientName()].inClub()) {
+        
+        events_list.push_back(std::unique_ptr<Event>(new ErrorEvent(event.getTime(), "ClientUnknown")));
+        return;
+    }
+
     if (clients_queue.size() > tables_amount) {
 
         clients_names[event.getClientName()].setInClub(false);

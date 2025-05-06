@@ -20,10 +20,10 @@ public:
 
 private:
 	
-	int tables_amount;
+	unsigned int tables_amount;
 	Time start_time;
 	Time end_time;
-	int rate;
+	unsigned int rate;
 
 	std::queue<std::string> clients_queue;
 	std::list<std::unique_ptr<Event>> events_list;
@@ -38,7 +38,7 @@ private:
 	
 public:
 
-	Club(int tables_amount, const Time& start_time, const Time& end_time, int rate)
+	Club(unsigned int tables_amount, const Time& start_time, const Time& end_time, unsigned int rate)
 		: tables_amount(tables_amount), start_time(start_time), end_time(end_time), rate(rate) {
 		
 		tables = std::vector<Table>(tables_amount);
