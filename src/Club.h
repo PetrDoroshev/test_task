@@ -45,7 +45,6 @@ public:
 
 	std::vector<Table> getTables();
 	int getRate();
-	
 	void printEvents();
 };
 
