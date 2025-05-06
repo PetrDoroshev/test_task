@@ -4,7 +4,8 @@
 #include "Table.h"
 #include "Client.h"
 #include "Utils.h"
-#include "ClientEvent.h"
+#include "events/ClientEvent.h"
+#include "events/ErrorEvent.h"
 #include <vector>
 #include <queue>
 #include <unordered_map>
@@ -21,7 +22,7 @@ private:
 	Time end_time;
 	int rate;
 
-	std::queue<Client> clients_queue;
+	std::queue<std::string> clients_queue;
 	std::queue<std::unique_ptr<Event>> events_queue;
 	std::vector<Table> tables;
 	std::unordered_map<std::string, Client> clients_names;
@@ -40,7 +41,8 @@ public:
 		tables = std::vector<Table>(tables_amount);
 	}
 
-	void processEvent(std::unique_ptr<Event> event);
+	void processEvent(ClientEvent* event); 
+	std::vector<Table> getTables();
 };
 
 

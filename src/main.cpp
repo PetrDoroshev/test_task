@@ -1,4 +1,4 @@
-#include "Event.h"
+#include "events/Event.h"
 #include "Club.h"
 #include "Utils.h"
 #include "Time.h"
@@ -8,11 +8,10 @@
 #include <regex>
 #include <optional>
 
-
-
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
 
     if (argc < 2) {
+
         return 0;
     }
 
@@ -27,75 +26,73 @@ int main(int argc, char* argv[]) {
     std::ifstream file(argv[1]);
     std::string line;
 
-    if (file.is_open()) {
+    if (!file.is_open()) {
 
-        getline(file, line);
-
-        if (std::regex_match(line, std::regex("\\d+"))) {
-
-            tables_amount = std::stoi(line);
-        }
-        else {
-
-            std::cout << line << std::endl;
-            return EXIT_FAILURE;
-        }
-
-        getline(file, line);
-
-        if (std::regex_match(line, std::regex("\\d{2}:\\d{2}\\s\\d{2}:\\d{2}"))) {
-
-            auto tokens = splitString(line, " ");
-
-            try {
-                start_time = Time(tokens[0]);
-                end_time = Time(tokens[1]);
-            }
-            catch (std::invalid_argument& ex) {
-                std::cout << line << std::endl;
-                return EXIT_FAILURE;
-            }
-
-        }
-        else {
-
-            std::cout << line << std::endl;
-            return EXIT_FAILURE;
-        }
-
-        getline(file, line);
-
-        if (std::regex_match(line, std::regex("\\d+"))) {
-
-            rate = std::stoi(line);
-        }
-        else {
-
-            std::cout << line << std::endl;
-            return EXIT_FAILURE;
-        }
-
-
-        auto club = Club(tables_amount, start_time, end_time, rate);
-
-        while (getline(file, line)) {
-
-            if (std::regex_match(line, std::regex("\\d{2}:\\d{2}\\s\\d{1,2}\\s[a-z, 1-9,_,-]+\\s{0,1}\\d*"))) {
-                
-                club.processEvent(std::unique_ptr<Event>(new ClientEvent(line)));
-            }  
-
-            else {
-
-                std::cout << line << std::endl;
-                return EXIT_FAILURE;
-            }
-        }
-    }
-
-    else {
         std::cout << "Unable to open file" << std::endl;
         return EXIT_FAILURE;
+    }
+
+    getline(file, line);
+
+    if (std::regex_match(line, std::regex("\\d+"))) {
+
+        tables_amount = std::stoi(line);
+    }
+    else {
+
+        std::cout << line << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    getline(file, line);
+
+    if (std::regex_match(line, std::regex("\\d{2}:\\d{2}\\s\\d{2}:\\d{2}"))) {
+
+        auto tokens = splitString(line, " ");
+
+        try {
+
+            start_time = Time(tokens[0]);
+            end_time = Time(tokens[1]);
+        }
+        catch (std::invalid_argument &ex) {
+
+            std::cout << line << std::endl;
+            return EXIT_FAILURE;
+        }
+    }
+    else {
+
+        std::cout << line << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    getline(file, line);
+
+    if (std::regex_match(line, std::regex("\\d+"))) {
+
+        rate = std::stoi(line);
+    }
+    else {
+
+        std::cout << line << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    auto club = Club(tables_amount, start_time, end_time, rate);
+
+    while (getline(file, line)) {
+
+        if (std::regex_match(line, std::regex("\\d{2}:\\d{2}\\s\\d{1,2}\\s[a-z, 1-9,_,-]+\\s{0,1}\\d*"))) {
+
+            club.processEvent(new ClientEvent(line));
+        }
+
+        else {
+
+            std::cout << line << std::endl;
+            return EXIT_FAILURE;
+        }
     }
 
     file.close();
